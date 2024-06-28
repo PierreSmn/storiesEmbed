@@ -142,7 +142,7 @@
           </svg>
         </div>
       </div>
-      <div class="story-title">Story 1</div>
+      <div class="story-title" id="title-1">Story 1</div>
     </div>
     <div class="story" id="story-2">
       <div class="story-image">
@@ -153,7 +153,7 @@
           </svg>
         </div>
       </div>
-      <div class="story-title">Story 2</div>
+      <div class="story-title" id="title-2">Story 2</div>
     </div>
     <div class="story" id="story-3">
       <div class="story-image">
@@ -164,7 +164,7 @@
           </svg>
         </div>
       </div>
-      <div class="story-title">Story 3</div>
+      <div class="story-title" id="title-3">Story 3</div>
     </div>
   </div>
 
@@ -183,13 +183,26 @@
 
   <script>
     (function () {
+      function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        const results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      }
+
       window.MyVideoCarouselConfig = {
         playButtonColor: '#0000FF',
-        integrationId: '26',
-        numVideos: 3 // Only fetch the first 3 videos
+        integrationId: getUrlParameter('integrationId') || '26',
+        numVideos: 3
       };
+
+      document.getElementById('title-1').textContent = getUrlParameter('title1') || 'Story 1';
+      document.getElementById('title-2').textContent = getUrlParameter('title2') || 'Story 2';
+      document.getElementById('title-3').textContent = getUrlParameter('title3') || 'Story 3';
+
       let data = [];
       let currentIndex = 0;
+
       async function fetchData() {
         const supabaseUrl = `https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations?id=eq.${window.MyVideoCarouselConfig.integrationId}&select=vid1,vid2,vid3`;
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
@@ -261,12 +274,14 @@
         muxPlayer.pause();
         overlay.style.display = 'none';
       }
+
       document.querySelector('.close-button').addEventListener('click', closeOverlay);
       document.getElementById('fullscreen-overlay').addEventListener('click', (e) => {
         if (!e.target.closest('.fullscreen-video-container')) {
           closeOverlay();
         }
       });
+
       fetchData();
     })();
   </script>
