@@ -1,15 +1,6 @@
 (function () {
+  // Inject styles into the head
   const style = `
-    body,
-    html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: transparent; /* Make background transparent */
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-
     .story-container {
       display: flex;
       gap: 10px;
@@ -40,7 +31,7 @@
     }
 
     .story-title {
-      color: #fff;
+      color: #000;
       font-size: 14px;
     }
 
@@ -122,7 +113,12 @@
       }
     }
   `;
+  
+  const styleElement = document.createElement('style');
+  styleElement.textContent = style;
+  document.head.appendChild(styleElement);
 
+  // Inject HTML into the body
   const html = `
     <div class="story-container" id="stories">
       <div class="story" id="story-1">
@@ -173,10 +169,10 @@
       </div>
     </div>
   `;
-
-  document.head.insertAdjacentHTML('beforeend', `<style>${style}</style>`);
+  
   document.body.insertAdjacentHTML('beforeend', html);
 
+  // Fetch and initialize stories
   function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
     return {
