@@ -108,7 +108,7 @@
     var container = document.createElement('div');
     container.className = 'story-container';
     container.id = 'stories';
-    document.body.appendChild(container);
+    document.getElementById('story-player-container').appendChild(container);
 
     var overlay = document.createElement('div');
     overlay.className = 'fullscreen-overlay';
@@ -125,7 +125,7 @@
         </div>
       </div>
     `;
-    document.body.appendChild(overlay);
+    document.getElementById('story-player-container').appendChild(overlay);
 
     overlay.style.display = 'none';
 
