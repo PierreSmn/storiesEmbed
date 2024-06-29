@@ -3,7 +3,7 @@ html {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #000;
+  background-color: transparent; /* Make background transparent */
   color: #fff;
   font-family: Arial, sans-serif;
 }
