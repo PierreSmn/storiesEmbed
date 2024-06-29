@@ -49,7 +49,12 @@ function initializeCarousel(config) {
   }
 
   function renderCarousel() {
-    const root = document.getElementById('carousel-root');
+    let root = document.getElementById('carousel-root');
+    if (!root) {
+      root = document.createElement('div');
+      root.id = 'carousel-root';
+      document.body.appendChild(root);
+    }
     root.innerHTML = `
       <div class="story-container" id="stories">
         ${titles.map((title, index) => `
@@ -85,6 +90,8 @@ function initializeCarousel(config) {
     stories.forEach((story, index) => {
       const img = story.querySelector('img');
       img.src = data[index].thumbnail;
+      const title = story.querySelector('.story-title');
+      title.textContent = titles[index];
       story.addEventListener('click', () => openOverlay(index));
       story.querySelector('.play-button-overlay').addEventListener('click', (e) => {
         e.stopPropagation();
