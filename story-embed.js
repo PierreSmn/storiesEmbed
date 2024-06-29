@@ -10,7 +10,7 @@
   const supabaseUrl = 'https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
 
-  async function fetchVideoIds(integrationId, numVideos) {
+  async function fetchVideoData(integrationId) {
     try {
       const response = await fetch(`${supabaseUrl}?id=eq.${integrationId}`, {
         method: 'GET',
@@ -27,21 +27,36 @@
 
       const data = await response.json();
       if (data.length > 0) {
-        const integrationData = data[0];
-        const videoIds = [];
-        for (let i = 1; i <= numVideos; i++) {
-          if (integrationData[`vid${i}`]) {
-            videoIds.push(integrationData[`vid${i}`]);
-          }
-        }
-
-        window.MyVideoCarouselConfig.desiredOrder = videoIds;
-        initializeCarousel();
+        return data[0];
       } else {
         console.error('No data found for the specified integration ID');
+        return null;
       }
     } catch (error) {
-      console.error('Error fetching video IDs:', error);
+      console.error('Error fetching video data:', error);
+      return null;
+    }
+  }
+
+  async function fetchVideoDetails(videoIds) {
+    try {
+      const response = await fetch(`https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/hostedSubs?id=in.(${videoIds.join(',')})&select=*`, {
+        method: 'GET',
+        headers: {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching video details:', error);
+      return [];
     }
   }
 
@@ -53,10 +68,36 @@
     document.head.appendChild(script);
   }
 
-  function initializeCarousel() {
+  async function initializeCarousel() {
+    const integrationId = window.MyVideoCarouselConfig.integrationId;
+    const numVideos = window.MyVideoCarouselConfig.numVideos;
+
+    if (!integrationId) {
+      console.error('Integration ID is not specified in the configuration');
+      return;
+    }
+
+    const integrationData = await fetchVideoData(integrationId);
+    if (!integrationData) {
+      return;
+    }
+
+    const videoIds = [];
+    const titles = [];
+    for (let i = 1; i <= numVideos; i++) {
+      if (integrationData[`vid${i}`]) {
+        videoIds.push(integrationData[`vid${i}`]);
+        titles.push(integrationData[`title${i}`] || `Story ${i}`);
+      }
+    }
+
+    const videoData = await fetchVideoDetails(videoIds);
+    window.MyVideoCarouselConfig.videoData = videoData;
+    window.MyVideoCarouselConfig.titles = titles;
+
     loadScript('https://unpkg.com/@mux/mux-player', function() {
       console.log('Mux Player script loaded');
-      initializeVideoCarousel(window.MyVideoCarouselConfig);
+      renderCarousel();
     });
 
     var link = document.createElement('link');
@@ -67,41 +108,6 @@
     var container = document.createElement('div');
     container.className = 'story-container';
     container.id = 'stories';
-    container.innerHTML = `
-      <div class="story" id="story-1">
-        <div class="story-image">
-          <img src="" alt="Story 1 Thumbnail">
-          <div class="play-button-overlay">
-            <svg viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="story-title">Story 1</div>
-      </div>
-      <div class="story" id="story-2">
-        <div class="story-image">
-          <img src="" alt="Story 2 Thumbnail">
-          <div class="play-button-overlay">
-            <svg viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="story-title">Story 2</div>
-      </div>
-      <div class="story" id="story-3">
-        <div class="story-image">
-          <img src="" alt="Story 3 Thumbnail">
-          <div class="play-button-overlay">
-            <svg viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="story-title">Story 3</div>
-      </div>
-    `;
     document.body.appendChild(container);
 
     var overlay = document.createElement('div');
@@ -129,50 +135,71 @@
         closeOverlay();
       }
     });
-
-    fetchData();
   }
 
-  function initializeVideoCarousel(config) {
-    const stories = document.querySelectorAll('.story');
-    const videoData = config.desiredOrder;
-    stories.forEach((story, index) => {
-      const img = story.querySelector('img');
-      img.src = videoData[index].thumbnail;
-      story.addEventListener('click', () => openOverlay(index));
-      story.querySelector('.play-button-overlay').addEventListener('click', (e) => {
+  function renderCarousel() {
+    const container = document.getElementById('stories');
+    const { videoData, titles } = window.MyVideoCarouselConfig;
+
+    videoData.forEach((video, index) => {
+      const storyDiv = document.createElement('div');
+      storyDiv.className = 'story';
+      storyDiv.id = `story-${index + 1}`;
+
+      const storyImageDiv = document.createElement('div');
+      storyImageDiv.className = 'story-image';
+
+      const img = document.createElement('img');
+      img.src = video.thumbnail;
+      img.alt = `Story ${index + 1} Thumbnail`;
+
+      const playButtonOverlay = document.createElement('div');
+      playButtonOverlay.className = 'play-button-overlay';
+      playButtonOverlay.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z"></path>
+        </svg>
+      `;
+
+      storyImageDiv.appendChild(img);
+      storyImageDiv.appendChild(playButtonOverlay);
+      storyDiv.appendChild(storyImageDiv);
+
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'story-title';
+      titleDiv.textContent = titles[index];
+
+      storyDiv.appendChild(titleDiv);
+      container.appendChild(storyDiv);
+
+      storyDiv.addEventListener('click', () => openOverlay(index));
+      playButtonOverlay.addEventListener('click', (e) => {
         e.stopPropagation();
         openOverlay(index);
       });
     });
-
-    function openOverlay(index) {
-      const overlay = document.getElementById('fullscreen-overlay');
-      const muxPlayer = overlay.querySelector('mux-player');
-      const video = videoData[index];
-      overlay.style.display = 'flex';
-      muxPlayer.setAttribute('playback-id', video.playback_id);
-      muxPlayer.setAttribute('metadata-video-title', video.title);
-      muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-      muxPlayer.load();
-      muxPlayer.addEventListener('loadeddata', function () {
-        muxPlayer.play();
-      });
-    }
-
-    function closeOverlay() {
-      const overlay = document.getElementById('fullscreen-overlay');
-      const muxPlayer = overlay.querySelector('mux-player');
-      muxPlayer.pause();
-      overlay.style.display = 'none';
-    }
   }
 
-  const integrationId = window.MyVideoCarouselConfig.integrationId;
-  const numVideos = window.MyVideoCarouselConfig.numVideos;
-  if (integrationId) {
-    fetchVideoIds(integrationId, numVideos);
-  } else {
-    console.error('Integration ID is not specified in the configuration');
+  function openOverlay(index) {
+    const overlay = document.getElementById('fullscreen-overlay');
+    const muxPlayer = overlay.querySelector('mux-player');
+    const video = window.MyVideoCarouselConfig.videoData[index];
+    overlay.style.display = 'flex';
+    muxPlayer.setAttribute('playback-id', video.playback_id);
+    muxPlayer.setAttribute('metadata-video-title', video.title);
+    muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
+    muxPlayer.load();
+    muxPlayer.addEventListener('loadeddata', function () {
+      muxPlayer.play();
+    });
   }
+
+  function closeOverlay() {
+    const overlay = document.getElementById('fullscreen-overlay');
+    const muxPlayer = overlay.querySelector('mux-player');
+    muxPlayer.pause();
+    overlay.style.display = 'none';
+  }
+
+  initializeCarousel();
 })();
