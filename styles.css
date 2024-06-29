@@ -2,8 +2,6 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #000;
-  color: #fff;
   font-family: Arial, sans-serif;
 }
 
@@ -37,7 +35,7 @@ body, html {
 }
 
 .story-title {
-  color: #fff;
+  color: #000;
   font-size: 14px;
 }
 
