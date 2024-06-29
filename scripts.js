@@ -1,28 +1,11 @@
-function getParameterByName(name, url = window.location.href) {
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-    results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-function initializeCarousel(config) {
-  const integrationId = config.integrationId || '26';
-  const titles = [
-    config.title1 || 'Story 1',
-    config.title2 || 'Story 2',
-    config.title3 || 'Story 3'
-  ];
-
+(function () {
   window.MyVideoCarouselConfig = {
     playButtonColor: '#0000FF',
-    integrationId: integrationId,
+    integrationId: '26',
     numVideos: 3 // Only fetch the first 3 videos
   };
   let data = [];
   let currentIndex = 0;
-
   async function fetchData() {
     const supabaseUrl = `https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations?id=eq.${window.MyVideoCarouselConfig.integrationId}&select=vid1,vid2,vid3`;
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
@@ -45,53 +28,14 @@ function initializeCarousel(config) {
       }
     });
     data = await videosResponse.json();
-    renderCarousel();
+    initializeStories();
   }
 
-  function renderCarousel() {
-    let root = document.getElementById('carousel-root');
-    if (!root) {
-      root = document.createElement('div');
-      root.id = 'carousel-root';
-      document.body.appendChild(root);
-    }
-    root.innerHTML = `
-      <div class="story-container" id="stories">
-        ${titles.map((title, index) => `
-          <div class="story" id="story-${index + 1}">
-            <div class="story-image">
-              <img src="" alt="${title} Thumbnail">
-              <div class="play-button-overlay">
-                <svg viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z"></path>
-                </svg>
-              </div>
-            </div>
-            <div class="story-title" id="title-${index + 1}">${title}</div>
-          </div>
-        `).join('')}
-      </div>
-
-      <div class="fullscreen-overlay" id="fullscreen-overlay">
-        <div class="fullscreen-video-container">
-          <mux-player class="fullscreen-video" playback-id="" metadata-video-title="" metadata-viewer-user-id="user" autoplay></mux-player>
-          <div class="close-button" id="close-overlay" tabindex="0" aria-label="Close dialog" role="button">
-            <span class="close-button-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0002 10.586L4.70718 3.29297L3.29297 4.70718L10.586 12.0002L3.29297 19.2933L4.70718 20.7075L12.0002 13.4145L19.2933 20.7075L20.7075 19.2933L13.4145 12.0002L20.7075 4.70723L19.2933 3.29302L12.0002 10.586Z" fill="white"></path>
-              </svg>
-            </span>
-          </div>
-        </div>
-      </div>
-    `;
-
+  function initializeStories() {
     const stories = document.querySelectorAll('.story');
     stories.forEach((story, index) => {
       const img = story.querySelector('img');
       img.src = data[index].thumbnail;
-      const title = story.querySelector('.story-title');
-      title.textContent = titles[index];
       story.addEventListener('click', () => openOverlay(index));
       story.querySelector('.play-button-overlay').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -133,26 +77,11 @@ function initializeCarousel(config) {
     muxPlayer.pause();
     overlay.style.display = 'none';
   }
-
-  document.addEventListener('click', (e) => {
-    if (e.target.matches('.close-button, .close-button *')) {
+  document.querySelector('.close-button').addEventListener('click', closeOverlay);
+  document.getElementById('fullscreen-overlay').addEventListener('click', (e) => {
+    if (!e.target.closest('.fullscreen-video-container')) {
       closeOverlay();
-    } else if (e.target.matches('#fullscreen-overlay')) {
-      if (!e.target.closest('.fullscreen-video-container')) {
-        closeOverlay();
-      }
     }
   });
-
   fetchData();
-}
-
-if (window.MyVideoCarouselConfig) {
-  initializeCarousel(window.MyVideoCarouselConfig);
-} else {
-  window.addEventListener('load', () => {
-    if (window.MyVideoCarouselConfig) {
-      initializeCarousel(window.MyVideoCarouselConfig);
-    }
-  });
-}
+})();
