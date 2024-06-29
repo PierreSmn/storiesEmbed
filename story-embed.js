@@ -170,36 +170,4 @@
       titleDiv.textContent = titles[index];
 
       storyDiv.appendChild(titleDiv);
-      container.appendChild(storyDiv);
-
-      storyDiv.addEventListener('click', () => openOverlay(index));
-      playButtonOverlay.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openOverlay(index);
-      });
-    });
-  }
-
-  function openOverlay(index) {
-    const overlay = document.getElementById('fullscreen-overlay');
-    const muxPlayer = overlay.querySelector('mux-player');
-    const video = window.MyVideoCarouselConfig.videoData[index];
-    overlay.style.display = 'flex';
-    muxPlayer.setAttribute('playback-id', video.playback_id);
-    muxPlayer.setAttribute('metadata-video-title', video.title);
-    muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-    muxPlayer.load();
-    muxPlayer.addEventListener('loadeddata', function () {
-      muxPlayer.play();
-    });
-  }
-
-  function closeOverlay() {
-    const overlay = document.getElementById('fullscreen-overlay');
-    const muxPlayer = overlay.querySelector('mux-player');
-    muxPlayer.pause();
-    overlay.style.display = 'none';
-  }
-
-  initializeCarousel();
-})();
+      container.append
