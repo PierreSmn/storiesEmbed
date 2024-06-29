@@ -1,6 +1,6 @@
 (function() {
   const script = document.createElement('script');
-  script.src = 'https://stories-embed.vercel.app/script.html';
+  script.src = 'https://your-vercel-deployment-url/index.html';
   script.onload = function() {
     const container = document.getElementById('carousel-container');
     fetch(script.src)
