@@ -68,7 +68,7 @@
     document.head.appendChild(script);
   }
 
-  async function initializeCarousel(container) {
+  async function initializeCarousel() {
     const integrationId = window.MyVideoCarouselConfig.integrationId;
     const numVideos = window.MyVideoCarouselConfig.numVideos;
 
@@ -97,13 +97,18 @@
 
     loadScript('https://unpkg.com/@mux/mux-player', function() {
       console.log('Mux Player script loaded');
-      renderCarousel(container);
+      renderCarousel();
     });
 
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://stories-embed.vercel.app/styles.css';
     document.head.appendChild(link);
+
+    var container = document.createElement('div');
+    container.className = 'story-container';
+    container.id = 'stories';
+    document.body.appendChild(container);
 
     var overlay = document.createElement('div');
     overlay.className = 'fullscreen-overlay';
@@ -132,7 +137,8 @@
     });
   }
 
-  function renderCarousel(container) {
+  function renderCarousel() {
+    const container = document.getElementById('stories');
     const { videoData, titles } = window.MyVideoCarouselConfig;
 
     videoData.forEach((video, index) => {
@@ -195,5 +201,5 @@
     overlay.style.display = 'none';
   }
 
-  window.initializeCarousel = initializeCarousel;
+  initializeCarousel();
 })();
