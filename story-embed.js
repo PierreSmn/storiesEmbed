@@ -1,6 +1,16 @@
 (function () {
   // Inject styles into the head
   const style = `
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
     .story-container {
       display: flex;
       gap: 10px;
@@ -31,7 +41,7 @@
     }
 
     .story-title {
-      color: #000;
+      color: #fff;
       font-size: 14px;
     }
 
@@ -130,7 +140,7 @@
             </svg>
           </div>
         </div>
-        <div class="story-title" id="story-title-1">Story 1</div>
+        <div class="story-title">Story 1</div>
       </div>
       <div class="story" id="story-2">
         <div class="story-image">
@@ -141,7 +151,7 @@
             </svg>
           </div>
         </div>
-        <div class="story-title" id="story-title-2">Story 2</div>
+        <div class="story-title">Story 2</div>
       </div>
       <div class="story" id="story-3">
         <div class="story-image">
@@ -152,7 +162,7 @@
             </svg>
           </div>
         </div>
-        <div class="story-title" id="story-title-3">Story 3</div>
+        <div class="story-title">Story 3</div>
       </div>
     </div>
 
@@ -192,7 +202,7 @@
   let currentIndex = 0;
   
   async function fetchData() {
-    const supabaseUrl = `https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations?id=eq.${window.MyVideoCarouselConfig.integrationId}&select=vid1,vid2,vid3,title1,title2,title3`;
+    const supabaseUrl = `https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations?id=eq.${window.MyVideoCarouselConfig.integrationId}&select=vid1,vid2,vid3`;
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
     const response = await fetch(supabaseUrl, {
       method: 'GET',
@@ -204,12 +214,6 @@
     });
     const integrationData = await response.json();
     const videoIds = [integrationData[0].vid1, integrationData[0].vid2, integrationData[0].vid3];
-    const titles = [integrationData[0].title1, integrationData[0].title2, integrationData[0].title3];
-
-    document.getElementById('story-title-1').textContent = titles[0];
-    document.getElementById('story-title-2').textContent = titles[1];
-    document.getElementById('story-title-3').textContent = titles[2];
-
     const videosResponse = await fetch(`https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/hostedSubs?id=in.(${videoIds.join(',')})&select=*`, {
       method: 'GET',
       headers: {
