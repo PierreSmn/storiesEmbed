@@ -132,79 +132,74 @@
 </head>
 
 <body>
-  <div class="story-container" id="stories">
-    <div class="story" id="story-1">
-      <div class="story-image">
-        <img src="" alt="Story 1 Thumbnail">
-        <div class="play-button-overlay">
-          <svg viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"></path>
-          </svg>
+  <div id="carousel-container" class="carousel-container">
+    <div class="story-container" id="stories">
+      <div class="story" id="story-1">
+        <div class="story-image">
+          <img src="" alt="Story 1 Thumbnail">
+          <div class="play-button-overlay">
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+          </div>
         </div>
+        <div class="story-title" id="title-1">Story 1</div>
       </div>
-      <div class="story-title" id="title-1">Story 1</div>
-    </div>
-    <div class="story" id="story-2">
-      <div class="story-image">
-        <img src="" alt="Story 2 Thumbnail">
-        <div class="play-button-overlay">
-          <svg viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"></path>
-          </svg>
+      <div class="story" id="story-2">
+        <div class="story-image">
+          <img src="" alt="Story 2 Thumbnail">
+          <div class="play-button-overlay">
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+          </div>
         </div>
+        <div class="story-title" id="title-2">Story 2</div>
       </div>
-      <div class="story-title" id="title-2">Story 2</div>
-    </div>
-    <div class="story" id="story-3">
-      <div class="story-image">
-        <img src="" alt="Story 3 Thumbnail">
-        <div class="play-button-overlay">
-          <svg viewBox="0 0 24 24">
-            <path d="M8 5v14l11-7z"></path>
-          </svg>
+      <div class="story" id="story-3">
+        <div class="story-image">
+          <img src="" alt="Story 3 Thumbnail">
+          <div class="play-button-overlay">
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+          </div>
         </div>
+        <div class="story-title" id="title-3">Story 3</div>
       </div>
-      <div class="story-title" id="title-3">Story 3</div>
     </div>
-  </div>
 
-  <div class="fullscreen-overlay" id="fullscreen-overlay">
-    <div class="fullscreen-video-container">
-      <mux-player class="fullscreen-video" playback-id="" metadata-video-title="" metadata-viewer-user-id="user" autoplay></mux-player>
-      <div class="close-button" id="close-overlay" tabindex="0" aria-label="Close dialog" role="button">
-        <span class="close-button-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0002 10.586L4.70718 3.29297L3.29297 4.70718L10.586 12.0002L3.29297 19.2933L4.70718 20.7075L12.0002 13.4145L19.2933 20.7075L20.7075 19.2933L13.4145 12.0002L20.7075 4.70723L19.2933 3.29302L12.0002 10.586Z" fill="white"></path>
-          </svg>
-        </span>
+    <div class="fullscreen-overlay" id="fullscreen-overlay">
+      <div class="fullscreen-video-container">
+        <mux-player class="fullscreen-video" playback-id="" metadata-video-title="" metadata-viewer-user-id="user" autoplay></mux-player>
+        <div class="close-button" id="close-overlay" tabindex="0" aria-label="Close dialog" role="button">
+          <span class="close-button-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0002 10.586L4.70718 3.29297L3.29297 4.70718L10.586 12.0002L3.29297 19.2933L4.70718 20.7075L12.0002 13.4145L19.2933 20.7075L20.7075 19.2933L13.4145 12.0002L20.7075 4.70723L19.2933 3.29302L12.0002 10.586Z" fill="white"></path>
+            </svg>
+          </span>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    (function () {
-      function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        const results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-      }
+    (function() {
+      const config = window.MyVideoCarouselConfig || {};
+      const integrationId = config.integrationId || '26';
+      const title1 = config.title1 || 'Story 1';
+      const title2 = config.title2 || 'Story 2';
+      const title3 = config.title3 || 'Story 3';
 
-      window.MyVideoCarouselConfig = {
-        playButtonColor: '#0000FF',
-        integrationId: getUrlParameter('integrationId') || '26',
-        numVideos: 3
-      };
-
-      document.getElementById('title-1').textContent = getUrlParameter('title1') || 'Story 1';
-      document.getElementById('title-2').textContent = getUrlParameter('title2') || 'Story 2';
-      document.getElementById('title-3').textContent = getUrlParameter('title3') || 'Story 3';
+      document.getElementById('title-1').textContent = title1;
+      document.getElementById('title-2').textContent = title2;
+      document.getElementById('title-3').textContent = title3;
 
       let data = [];
       let currentIndex = 0;
 
       async function fetchData() {
-        const supabaseUrl = `https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations?id=eq.${window.MyVideoCarouselConfig.integrationId}&select=vid1,vid2,vid3`;
+        const supabaseUrl = `https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations?id=eq.${integrationId}&select=vid1,vid2,vid3`;
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
         const response = await fetch(supabaseUrl, {
           method: 'GET',
@@ -251,7 +246,7 @@
         muxPlayer.setAttribute('metadata-video-title', video.title);
         muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
         muxPlayer.load();
-        muxPlayer.addEventListener('loadeddata', function () {
+        muxPlayer.addEventListener('loadeddata', function() {
           muxPlayer.play();
         });
         muxPlayer.removeEventListener('ended', playNextVideo);
