@@ -184,8 +184,19 @@
   </div>
 
   <script>
-    (function() {
-      const config = window.MyVideoCarouselConfig || {};
+    function getConfig() {
+      return new Promise((resolve) => {
+        const interval = setInterval(() => {
+          if (window.MyVideoCarouselConfig) {
+            clearInterval(interval);
+            resolve(window.MyVideoCarouselConfig);
+          }
+        }, 100);
+      });
+    }
+
+    (async function() {
+      const config = await getConfig();
       const integrationId = config.integrationId || '26';
       const title1 = config.title1 || 'Story 1';
       const title2 = config.title2 || 'Story 2';
