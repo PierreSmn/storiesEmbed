@@ -141,7 +141,11 @@
     const container = document.getElementById('stories');
     const { videoData, titles } = window.MyVideoCarouselConfig;
 
+    console.log('Video Data:', videoData);
+    console.log('Titles:', titles);
+
     videoData.forEach((video, index) => {
+      console.log(`Creating story for video: ${video.title}, with title: ${titles[index]}`);
       const storyDiv = document.createElement('div');
       storyDiv.className = 'story';
       storyDiv.id = `story-${index + 1}`;
