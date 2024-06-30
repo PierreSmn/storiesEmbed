@@ -125,7 +125,7 @@
         </div>
       </div>
     `;
-    document.getElementById('story-player-container').appendChild(overlay);
+    document.body.appendChild(overlay);
 
     overlay.style.display = 'none';
 
