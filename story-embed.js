@@ -151,7 +151,7 @@
 
       const img = document.createElement('img');
       img.src = video.thumbnail;
-      img.alt = `Story ${index + 1} Thumbnail`;
+      img.alt = titles[index]; // Use the title for the alt attribute
 
       const playButtonOverlay = document.createElement('div');
       playButtonOverlay.className = 'play-button-overlay';
@@ -167,7 +167,7 @@
 
       const titleDiv = document.createElement('div');
       titleDiv.className = 'story-title';
-      titleDiv.textContent = titles[index];
+      titleDiv.textContent = titles[index]; // Set the correct title
 
       storyDiv.appendChild(titleDiv);
       container.appendChild(storyDiv);
