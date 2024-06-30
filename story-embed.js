@@ -92,8 +92,15 @@
     }
 
     const videoData = await fetchVideoDetails(videoIds);
-    window.MyVideoCarouselConfig.videoData = videoData;
-    window.MyVideoCarouselConfig.titles = titles;
+    const videoDetails = videoIds.map((id, index) => {
+      const video = videoData.find(v => v.id === id);
+      return {
+        ...video,
+        title: titles[index]
+      };
+    });
+
+    window.MyVideoCarouselConfig.videoData = videoDetails;
 
     loadScript('https://unpkg.com/@mux/mux-player', function() {
       console.log('Mux Player script loaded');
@@ -139,13 +146,12 @@
 
   function renderCarousel() {
     const container = document.getElementById('stories');
-    const { videoData, titles } = window.MyVideoCarouselConfig;
+    const { videoData } = window.MyVideoCarouselConfig;
 
     console.log('Video Data:', videoData);
-    console.log('Titles:', titles);
 
     videoData.forEach((video, index) => {
-      console.log(`Creating story for video: ${video.title}, with title: ${titles[index]}`);
+      console.log(`Creating story for video: ${video.title}`);
       const storyDiv = document.createElement('div');
       storyDiv.className = 'story';
       storyDiv.id = `story-${index + 1}`;
@@ -155,7 +161,7 @@
 
       const img = document.createElement('img');
       img.src = video.thumbnail;
-      img.alt = titles[index]; // Use the title for the alt attribute
+      img.alt = video.title; // Use the title for the alt attribute
 
       const playButtonOverlay = document.createElement('div');
       playButtonOverlay.className = 'play-button-overlay';
@@ -171,7 +177,7 @@
 
       const titleDiv = document.createElement('div');
       titleDiv.className = 'story-title';
-      titleDiv.textContent = titles[index]; // Set the correct title
+      titleDiv.textContent = video.title; // Set the correct title
 
       storyDiv.appendChild(titleDiv);
       container.appendChild(storyDiv);
