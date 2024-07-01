@@ -73,6 +73,7 @@ mux-player {
   border-radius: 16px;
   --seek-backward-button: none;
   --seek-forward-button: none;
+  object-fit: cover; /* Ensure the video covers the container */
 }
 
 .close-button {
