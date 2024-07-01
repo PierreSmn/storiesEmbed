@@ -55,7 +55,7 @@ body, html {
 .fullscreen-video-container {
   position: relative;
   height: 80%;
-  width: 80%; /* Ensure the container width is set to 80% */
+  width: auto;
   max-width: 80%;
   background-color: #000;
   border-radius: 16px;
@@ -66,8 +66,10 @@ body, html {
 }
 
 mux-player {
-  width: 100%; /* Ensure the player width is 100% of the container */
-  height: 100%; /* Ensure the player height is 100% of the container */
+  aspect-ratio: 9 / 16;
+  height: 100%;
+  width: auto;
+  max-width: 100%;
   border-radius: 16px;
   --seek-backward-button: none;
   --seek-forward-button: none;
