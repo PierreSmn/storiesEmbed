@@ -50,13 +50,15 @@ body, html {
   z-index: 10000; /* Ensure this is higher than other elements */
   justify-content: center;
   align-items: center;
+  padding: 25px; /* Add padding to the overlay to accommodate the container padding */
+  box-sizing: border-box; /* Ensure padding is included in the element's total width and height */
 }
 
 .fullscreen-video-container {
   position: relative;
-  height: 80%;
-  width: auto;
-  max-width: 50%; /* Adjusted to be less wide */
+  height: calc(80% - 50px); /* Adjusted to accommodate 25px padding on top and bottom */
+  width: calc(100% - 50px); /* Adjusted to accommodate 25px padding on left and right */
+  max-width: calc(50% - 50px); /* Adjusted to accommodate 25px padding on left and right */
   border-radius: 16px;
   overflow: hidden;
   display: flex;
@@ -106,9 +108,19 @@ mux-player {
 
 @media (max-width: 600px) {
   .fullscreen-video-container {
-    height: 90%;
-    width: 90%;
-    max-width: 90%;
+    height: calc(90% - 50px); /* Adjusted to accommodate 25px padding on top and bottom */
+    width: calc(90% - 50px); /* Adjusted to accommodate 25px padding on left and right */
+    max-width: calc(90% - 50px); /* Ensure the container is more responsive on small screens */
+  }
+
+  mux-player {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    border-radius: 16px;
+    --seek-backward-button: none;
+    --seek-forward-button: none;
+    object-fit: cover; /* Ensure the video covers the container */
   }
 
   .close-button-icon svg {
