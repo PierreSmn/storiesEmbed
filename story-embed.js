@@ -198,16 +198,8 @@
     muxPlayer.setAttribute('playback-id', video.playback_id);
     muxPlayer.setAttribute('metadata-video-title', video.title);
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-    muxPlayer.style.width = ''; // Reset any width style
-    muxPlayer.style.height = ''; // Reset any height style
     muxPlayer.load();
     muxPlayer.addEventListener('loadeddata', function () {
-      const videoElement = muxPlayer.shadowRoot.querySelector('video');
-      if (videoElement) {
-        videoElement.style.width = '100%'; // Ensure the video takes full width of the player
-        videoElement.style.height = '100%'; // Ensure the video takes full height of the player
-        videoElement.style.objectFit = 'contain'; // Ensure the video scales properly
-      }
       muxPlayer.play();
     });
   }
