@@ -54,8 +54,6 @@ body, html {
 
 .fullscreen-video-container {
   position: relative;
-  height: 80%;
-  width: 80%;
   background-color: #000;
   border-radius: 16px;
   overflow: hidden;
@@ -65,9 +63,7 @@ body, html {
 }
 
 mux-player {
-  height: 100%;
-  width: 100%;
-  object-fit: cover; /* Ensure the video covers the container */
+  border-radius: 16px;
   --seek-backward-button: none;
   --seek-forward-button: none;
 }
@@ -102,11 +98,6 @@ mux-player {
 }
 
 @media (max-width: 600px) {
-  .fullscreen-video-container {
-    height: 90%;
-    width: 90%;
-  }
-
   .close-button-icon svg {
     width: 20px;
     height: 20px;
