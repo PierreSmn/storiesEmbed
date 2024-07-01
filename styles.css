@@ -57,7 +57,6 @@ body, html {
   height: 80%;
   width: auto;
   max-width: 50%; /* Adjusted to be less wide */
-  background-color: rgba(0, 0, 0, 0.5); /* Same background color as fullscreen-overlay */
   border-radius: 16px;
   overflow: hidden;
   display: flex;
