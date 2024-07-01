@@ -55,9 +55,9 @@ body, html {
 .fullscreen-video-container {
   position: relative;
   height: 80%;
-  width: 90%;
-  max-width: 500px; /* Set a maximum width */
-  background-color: rgba(0, 0, 0, 0.5);
+  width: auto;
+  max-width: 40%; /* Adjusted to be less wide */
+  background-color: rgba(0, 0, 0, 0.5); /* Same background color as fullscreen-overlay */
   border-radius: 16px;
   overflow: hidden;
   display: flex;
@@ -66,8 +66,10 @@ body, html {
 }
 
 mux-player {
-  width: 100%;
+  aspect-ratio: 9 / 16;
   height: 100%;
+  width: auto;
+  max-width: 100%;
   border-radius: 16px;
   --seek-backward-button: none;
   --seek-forward-button: none;
@@ -106,13 +108,14 @@ mux-player {
 @media (max-width: 600px) {
   .fullscreen-video-container {
     height: 90%;
-    width: 90%;
-    max-width: 90%;
+    width: auto;
+    max-width: 80%; /* Ensure the container is more responsive on small screens */
   }
 
   mux-player {
     height: 100%;
-    width: 100%;
+    width: auto;
+    max-width: 100%;
     border-radius: 16px;
     --seek-backward-button: none;
     --seek-forward-button: none;
