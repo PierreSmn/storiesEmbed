@@ -122,7 +122,7 @@
     overlay.id = 'fullscreen-overlay';
     overlay.innerHTML = `
       <div class="fullscreen-video-container">
-        <mux-player class="fullscreen-video" playback-id="" metadata-video-title="" metadata-viewer-user-id="user" secondary-color="#5E35B1" autoplay></mux-player>
+        <mux-player class="fullscreen-video" playback-id="" metadata-video-title="" metadata-viewer-user-id="user" autoplay></mux-player>
         <div class="close-button" id="close-overlay" tabindex="0" aria-label="Close dialog" role="button">
           <span class="close-button-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
