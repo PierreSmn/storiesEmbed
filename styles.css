@@ -108,18 +108,8 @@ mux-player {
 @media (max-width: 600px) {
   .fullscreen-video-container {
     height: 90%;
-    width: auto;
-    max-width: 90%; /* Ensure the container is more responsive on small screens */
-  }
-
-  mux-player {
-    height: 100%;
-    width: auto;
-    max-width: 100%;
-    border-radius: 16px;
-    --seek-backward-button: none;
-    --seek-forward-button: none;
-    object-fit: cover; /* Ensure the video covers the container */
+    width: 90%;
+    max-width: 90%;
   }
 
   .close-button-icon svg {
