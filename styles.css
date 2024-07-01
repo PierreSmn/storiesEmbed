@@ -58,7 +58,7 @@ body, html {
   width: auto;
   max-width: 45%; /* Adjusted to be less wide */
   background-color: rgba(0, 0, 0, 0.5);
-  --controls-backdrop-color: rgba(0, 0, 0, 0.5);
+
   border-radius: 16px;
   overflow: hidden;
   display: flex;
