@@ -55,7 +55,7 @@ body, html {
 .fullscreen-video-container {
   position: relative;
   height: 80%;
-  width: calc(auto-50px);
+  width: calc(100% - 50px);
   max-width: 50%; /* Adjusted to be less wide */
   border-radius: 16px;
   overflow: hidden;
@@ -106,9 +106,20 @@ mux-player {
 
 @media (max-width: 600px) {
   .fullscreen-video-container {
-    height: 90%;
-    width: 90%;
-    max-width: 90%;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0; /* Remove border radius for full screen effect */
+  }
+
+  mux-player {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    --seek-backward-button: none;
+    --seek-forward-button: none;
+    object-fit: cover; /* Ensure the video covers the container */
   }
 
   .close-button-icon svg {
