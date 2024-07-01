@@ -56,7 +56,7 @@ body, html {
   position: relative;
   height: 80%;
   width: auto;
-  max-width: 50%; /* Adjusted to be less wide */
+  max-width: 45%; /* Adjusted to be less wide */
   background-color: #000;
   border-radius: 16px;
   overflow: hidden;
