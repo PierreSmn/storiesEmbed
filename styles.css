@@ -74,7 +74,6 @@ mux-player {
   --seek-backward-button: none;
   --seek-forward-button: none;
   object-fit: cover; /* Ensure the video covers the container */
-   --controls-backdrop-color: rgb(0 0 0 / 5%);
 }
 
 .close-button {
