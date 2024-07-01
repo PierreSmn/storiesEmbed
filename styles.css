@@ -109,7 +109,7 @@ mux-player {
   .fullscreen-video-container {
     height: 90%;
     width: auto;
-    max-width: 90%; /* Ensure the container is more responsive on small screens */
+    max-width: 40%; /* Ensure the container is more responsive on small screens */
   }
 
   mux-player {
