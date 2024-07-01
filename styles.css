@@ -55,7 +55,7 @@ body, html {
 .fullscreen-video-container {
   position: relative;
   height: 80%;
-  width: auto;
+  width: calc(auto-50px);
   max-width: 50%; /* Adjusted to be less wide */
   border-radius: 16px;
   overflow: hidden;
