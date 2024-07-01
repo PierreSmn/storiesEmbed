@@ -54,9 +54,8 @@ body, html {
 
 .fullscreen-video-container {
   position: relative;
-  width: 80%; /* Set a fixed width */
-  max-width: 80%; /* Max width of the container */
-  height: 80%; /* Set a fixed height */
+  width: 56.25%; /* 9:16 aspect ratio */
+  height: 100%;
   max-height: 80%; /* Max height of the container */
   background-color: #000;
   border-radius: 16px;
@@ -106,7 +105,7 @@ mux-player {
 @media (max-width: 600px) {
   .fullscreen-video-container {
     width: 90%; /* Adjust width for smaller screens */
-    height: 90%; /* Adjust height for smaller screens */
+    height: auto; /* Maintain aspect ratio */
   }
 
   .close-button-icon svg {
