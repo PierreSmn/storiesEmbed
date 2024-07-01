@@ -61,7 +61,7 @@ body, html {
   border-radius: 16px;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align items at the top */
   justify-content: center;
 }
 
