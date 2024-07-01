@@ -46,7 +46,7 @@ body, html {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Ensure both overlay and container have the same background */
   z-index: 10000; /* Ensure this is higher than other elements */
   justify-content: center;
   align-items: center;
@@ -54,10 +54,10 @@ body, html {
 
 .fullscreen-video-container {
   position: relative;
-  height: 85%;
+  height: 80%;
   width: auto;
-  max-width: 45%; /* Adjusted to be less wide */
-
+  max-width: 50%; /* Adjusted to be less wide */
+  background-color: rgba(0, 0, 0, 0.5); /* Same background color as fullscreen-overlay */
   border-radius: 16px;
   overflow: hidden;
   display: flex;
@@ -108,8 +108,18 @@ mux-player {
 @media (max-width: 600px) {
   .fullscreen-video-container {
     height: 90%;
-    width: 90%;
-    max-width: 90%;
+    width: auto;
+    max-width: 90%; /* Ensure the container is more responsive on small screens */
+  }
+
+  mux-player {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    border-radius: 16px;
+    --seek-backward-button: none;
+    --seek-forward-button: none;
+    object-fit: cover; /* Ensure the video covers the container */
   }
 
   .close-button-icon svg {
