@@ -54,7 +54,7 @@ body, html {
 
 .fullscreen-video-container {
   position: relative;
-  width: 80%; /* Adjust width for better layout */
+  width: calc(auto-50px);
   height: 80%;
   background-color: black; /* Ensure background color */
   border-radius: 16px;
@@ -65,7 +65,7 @@ body, html {
 }
 
 mux-player {
-  width: 100%;
+  width: auto;
   height: 100%;
   max-width: 100%;
   border-radius: 16px;
