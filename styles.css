@@ -54,7 +54,7 @@ body, html {
 
 .fullscreen-video-container {
   position: relative;
-  width: calc(auto-50px);
+  width: auto;
   max-width: 50%; /* Adjusted to be less wide */
   height: 80%;
   background-color: black; /* Ensure background color */
