@@ -199,7 +199,7 @@
     muxPlayer.setAttribute('metadata-video-title', video.title);
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
     muxPlayer.addEventListener('loadeddata', function () {
-      muxPlayer.play();
+    muxPlayer.play();
     });
   }
 
