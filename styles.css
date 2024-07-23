@@ -65,10 +65,10 @@ body, html {
 }
 
 mux-player {
-  aspect-ratio: 9 / 16;
+ 
   width: auto;
   height: 100%;
-  max-width: 100%;
+  max-width: 56%;
   border-radius: 16px;
   --seek-backward-button: none;
   --seek-forward-button: none;
