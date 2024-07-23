@@ -198,7 +198,6 @@
     muxPlayer.setAttribute('playback-id', video.playback_id);
     muxPlayer.setAttribute('metadata-video-title', video.title);
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-    muxPlayer.load();
     muxPlayer.addEventListener('loadeddata', function () {
       muxPlayer.play();
     });
