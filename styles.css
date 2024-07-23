@@ -67,7 +67,7 @@ body, html {
 mux-player {
   width: auto;
   height: 100%;
-  max-width: 100%;
+
   border-radius: 16px;
   --seek-backward-button: none;
   --seek-forward-button: none;
