@@ -196,7 +196,7 @@
     const video = window.MyVideoCarouselConfig.videoData[index];
     overlay.style.display = 'flex';
     muxPlayer.setAttribute('playback-id', video.playback_id);
-    muxPlayer.setAttribute('metadata-video-title', video.title);
+    muxPlayer.setAttribute('metadata-video-title', video.video_title);
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
     muxPlayer.addEventListener('loadeddata', function () {
     muxPlayer.play();
