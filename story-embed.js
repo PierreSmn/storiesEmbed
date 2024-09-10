@@ -10,6 +10,7 @@
   const supabaseUrl = 'https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
 
+  // Function to fetch video data from the integration ID
   async function fetchVideoData(integrationId) {
     try {
       const response = await fetch(`${supabaseUrl}?id=eq.${integrationId}`, {
@@ -38,6 +39,7 @@
     }
   }
 
+  // Fetch video details from hostedSubs table using videoIds
   async function fetchVideoDetails(videoIds) {
     try {
       const response = await fetch(`https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/hostedSubs?id=in.(${videoIds.join(',')})&select=*`, {
@@ -60,6 +62,7 @@
     }
   }
 
+  // Dynamically load external scripts like the Mux Player
   function loadScript(src, callback) {
     var script = document.createElement('script');
     script.src = src;
@@ -68,6 +71,7 @@
     document.head.appendChild(script);
   }
 
+  // Initialize the carousel and load the Mux player script
   async function initializeCarousel() {
     const integrationId = window.MyVideoCarouselConfig.integrationId;
     const numVideos = window.MyVideoCarouselConfig.numVideos;
@@ -82,35 +86,38 @@
       return;
     }
 
+    // Fetch video IDs and titles
     const videoIds = [];
-    const titles = [];
     for (let i = 1; i <= numVideos; i++) {
       if (integrationData[`vid${i}`]) {
         videoIds.push(integrationData[`vid${i}`]);
-        titles.push(integrationData[`title${i}`] || `Story ${i}`);
       }
     }
 
+    // Fetch video details from hostedSubs
     const videoData = await fetchVideoDetails(videoIds);
     const videoDetails = videoIds.map((id, index) => {
       const video = videoData.find(v => v.id === id);
       return {
-        ...video,
+        ...video
       };
     });
 
     window.MyVideoCarouselConfig.videoData = videoDetails;
 
+    // Load Mux Player script FIRST, then render the carousel after it's fully loaded
     loadScript('https://unpkg.com/@mux/mux-player', function() {
       console.log('Mux Player script loaded');
-      renderCarousel();
+      renderCarousel(); // Only render the carousel after the Mux player script is loaded
     });
 
+    // Load external CSS for styles
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://stories-embed.vercel.app/styles.css';
     document.head.appendChild(link);
 
+    // Prepare carousel container and overlay
     var container = document.createElement('div');
     container.className = 'story-container';
     container.id = 'stories';
@@ -143,6 +150,7 @@
     });
   }
 
+  // Render the carousel with fetched video data
   function renderCarousel() {
     const container = document.getElementById('stories');
     const { videoData } = window.MyVideoCarouselConfig;
@@ -189,36 +197,36 @@
     });
   }
 
+  // Function to open the video overlay with Mux player
+  function openOverlay(index) {
+    const overlay = document.getElementById('fullscreen-overlay');
+    const muxPlayer = overlay.querySelector('mux-player');
+    const video = window.MyVideoCarouselConfig.videoData[index];
 
+    // Log title and metadata
+    console.log('Setting metadata-video-title:', video.title);
 
-function openOverlay(index) {
-  const overlay = document.getElementById('fullscreen-overlay');
-  const muxPlayer = overlay.querySelector('mux-player');
-  const video = window.MyVideoCarouselConfig.videoData[index];
+    // Set the metadata BEFORE loading the player
+    muxPlayer.setAttribute('playback-id', video.playback_id);
+    muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Ensure title is set correctly
+    muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
 
-  // Log title and metadata
-  console.log('Setting metadata-video-title:', video.title);
+    // Load the player AFTER setting metadata
+    muxPlayer.load();
 
-  // Set the metadata BEFORE loading the player
-  muxPlayer.setAttribute('playback-id', video.playback_id);
-  muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Ensure title is set correctly
-  muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-
-  // Load the player AFTER setting metadata
-  muxPlayer.load();
-
-  // Use loadedmetadata event to ensure metadata is processed before playing
-  muxPlayer.addEventListener('loadedmetadata', function () {
-    console.log('Player loaded with metadata:', {
-      title: muxPlayer.getAttribute('metadata-video-title'),
-      playbackId: muxPlayer.getAttribute('playback-id')
+    // Use loadedmetadata event to ensure metadata is processed before playing
+    muxPlayer.addEventListener('loadedmetadata', function () {
+      console.log('Player loaded with metadata:', {
+        title: muxPlayer.getAttribute('metadata-video-title'),
+        playbackId: muxPlayer.getAttribute('playback-id')
+      });
+      muxPlayer.play(); // Play the video once metadata is fully loaded
     });
-    muxPlayer.play(); // Play the video once metadata is fully loaded
-  });
 
-  overlay.style.display = 'flex'; // Show the overlay
-}
+    overlay.style.display = 'flex'; // Show the overlay
+  }
 
+  // Function to close the overlay and pause the video
   function closeOverlay() {
     const overlay = document.getElementById('fullscreen-overlay');
     const muxPlayer = overlay.querySelector('mux-player');
@@ -226,5 +234,6 @@ function openOverlay(index) {
     overlay.style.display = 'none';
   }
 
+  // Initialize carousel on page load
   initializeCarousel();
 })();
