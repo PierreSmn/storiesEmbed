@@ -191,27 +191,18 @@
 
 
 
-function openOverlay(index) {
-  const overlay = document.getElementById('fullscreen-overlay');
-  const muxPlayer = overlay.querySelector('mux-player');
-  const video = window.MyVideoCarouselConfig.videoData[index];
-
-  console.log('Setting metadata-video-title:', video.title); // Log the title to ensure it's correct
-
-  overlay.style.display = 'flex';
-
-  // Set all necessary attributes before loading the player
-  muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Set the title before loading
-  muxPlayer.setAttribute('playback-id', video.playback_id);
-  muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-
-  // Load the player after setting the metadata
-  muxPlayer.load();
-
-  muxPlayer.addEventListener('loadeddata', function () {
-    muxPlayer.play(); // Play the video when the data is ready
-  });
-}
+function openOverlay(index) {  // <--- Ensure openOverlay is defined globally
+    const overlay = document.getElementById('fullscreen-overlay');
+    const muxPlayer = overlay.querySelector('mux-player');
+    const video = window.MyVideoCarouselConfig.videoData[index];
+    overlay.style.display = 'flex';
+    muxPlayer.setAttribute('playback-id', video.playback_id);
+    muxPlayer.setAttribute('metadata-video-title', video.title);
+    muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
+    muxPlayer.addEventListener('loadeddata', function () {
+      muxPlayer.play();
+    });
+  }
 
   function closeOverlay() {
     const overlay = document.getElementById('fullscreen-overlay');
