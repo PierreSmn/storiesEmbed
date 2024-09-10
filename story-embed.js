@@ -96,7 +96,7 @@
       const video = videoData.find(v => v.id === id);
       return {
         ...video,
-        titleDiv: titles[index]
+        title: titles[index]
       };
     });
 
@@ -177,7 +177,7 @@
 
       const titleDiv = document.createElement('div');
       titleDiv.className = 'story-title';
-      titleDiv.textContent = titleDev; // Set the correct title
+      titleDiv.textContent = video.title; // Set the correct title
 
       storyDiv.appendChild(titleDiv);
       container.appendChild(storyDiv);
