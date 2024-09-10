@@ -190,7 +190,7 @@
   }
 
 
-Copy code
+
 function createVideoElement(video) {
   const videoElement = document.createElement('mux-player');
   videoElement.className = 'video';
