@@ -40,7 +40,7 @@
 
   async function fetchVideoDetails(videoIds) {
     try {
-      const response = await fetch(`https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/hostedSubs?id=in.(${videoIds.join(',')})&select=playback_id,title,thumbnail`, {
+      const response = await fetch(`https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/hostedSubs?id=in.(${videoIds.join(',')})&select=*`, {
         method: 'GET',
         headers: {
           'apikey': supabaseKey,
