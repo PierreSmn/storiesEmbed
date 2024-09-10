@@ -196,23 +196,27 @@ function openOverlay(index) {
   const muxPlayer = overlay.querySelector('mux-player');
   const video = window.MyVideoCarouselConfig.videoData[index];
 
-  if (!muxPlayer.hasAttribute('playback-id')) {
-    // Set the metadata if the player is not loaded yet
-    muxPlayer.setAttribute('playback-id', video.playback_id);
-    muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video');
-    muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-  }
+  // Log title and metadata
+  console.log('Setting metadata-video-title:', video.title);
 
+  // Set the metadata BEFORE loading the player
+  muxPlayer.setAttribute('playback-id', video.playback_id);
+  muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Ensure title is set correctly
+  muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
+
+  // Load the player AFTER setting metadata
   muxPlayer.load();
-  muxPlayer.addEventListener('loadeddata', function () {
-    console.log('Player loaded, playing video with metadata:', {
+
+  // Use loadedmetadata event to ensure metadata is processed before playing
+  muxPlayer.addEventListener('loadedmetadata', function () {
+    console.log('Player loaded with metadata:', {
       title: muxPlayer.getAttribute('metadata-video-title'),
       playbackId: muxPlayer.getAttribute('playback-id')
     });
-    muxPlayer.play();
+    muxPlayer.play(); // Play the video once metadata is fully loaded
   });
 
-  overlay.style.display = 'flex';
+  overlay.style.display = 'flex'; // Show the overlay
 }
 
   function closeOverlay() {
