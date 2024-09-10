@@ -96,7 +96,7 @@
       const video = videoData.find(v => v.id === id);
       return {
         ...video,
-        title: titles[index]
+        title: video.title
       };
     });
 
