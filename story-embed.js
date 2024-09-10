@@ -191,18 +191,33 @@
 
 
 
-function openOverlay(index) {  // <--- Ensure openOverlay is defined globally
-    const overlay = document.getElementById('fullscreen-overlay');
-    const muxPlayer = overlay.querySelector('mux-player');
-    const video = window.MyVideoCarouselConfig.videoData[index];
-    overlay.style.display = 'flex';
-    muxPlayer.setAttribute('playback-id', video.playback_id);
-    muxPlayer.setAttribute('metadata-video-title', video.title);
-    muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-    muxPlayer.addEventListener('loadeddata', function () {
-      muxPlayer.play();
+function openOverlay(index) {
+  const overlay = document.getElementById('fullscreen-overlay');
+  const muxPlayer = overlay.querySelector('mux-player');
+  const video = window.MyVideoCarouselConfig.videoData[index];
+
+  // Log the title to ensure the correct one is being used
+  console.log('Setting metadata-video-title:', video.title);
+
+  // Set the metadata BEFORE loading the player
+  muxPlayer.setAttribute('playback-id', video.playback_id);
+  muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video');
+  muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
+
+  // Ensure player is loaded only after setting the metadata
+  muxPlayer.load();
+
+  // Log to check when the player is loaded and ready to play
+  muxPlayer.addEventListener('loadeddata', function () {
+    console.log('Player loaded with metadata:', {
+      title: muxPlayer.getAttribute('metadata-video-title'),
+      playbackId: muxPlayer.getAttribute('playback-id')
     });
-  }
+    muxPlayer.play();
+  });
+
+  overlay.style.display = 'flex'; // Show the overlay
+}
 
   function closeOverlay() {
     const overlay = document.getElementById('fullscreen-overlay');
