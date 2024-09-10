@@ -189,18 +189,26 @@
     });
   }
 
-  function openOverlay(index) {
-    const overlay = document.getElementById('fullscreen-overlay');
-    const muxPlayer = overlay.querySelector('mux-player');
-    const video = window.MyVideoCarouselConfig.videoData[index];
-    overlay.style.display = 'flex';
-    muxPlayer.setAttribute('playback-id', video.playback_id);
-    muxPlayer.setAttribute('metadata-video-title', video.title);
+ function openOverlay(index) {
+  const overlay = document.getElementById('fullscreen-overlay');
+  const muxPlayer = overlay.querySelector('mux-player');
+  const video = window.MyVideoCarouselConfig.videoData[index];
+
+  console.log('Setting metadata-video-title:', video.title); // Log the title
+
+  overlay.style.display = 'flex';
+
+  muxPlayer.setAttribute('playback-id', video.playback_id);
+
+  muxPlayer.addEventListener('loadedmetadata', function() {
+    // Only set the metadata-video-title after the player is ready
+    muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video');
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-    muxPlayer.addEventListener('loadeddata', function () {
     muxPlayer.play();
-    });
-  }
+  });
+
+  muxPlayer.load();
+}
 
   function closeOverlay() {
     const overlay = document.getElementById('fullscreen-overlay');
