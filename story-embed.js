@@ -211,7 +211,7 @@
     muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Ensure title is set correctly
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
 
-     debugger;
+
 
     // Load the player AFTER setting metadata
     muxPlayer.load();
