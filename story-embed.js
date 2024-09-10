@@ -201,8 +201,8 @@ function openOverlay(index) {
   overlay.style.display = 'flex';
 
   // Set all necessary attributes before loading the player
-  muxPlayer.setAttribute('playback-id', video.playback_id);
   muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Set the title before loading
+  muxPlayer.setAttribute('playback-id', video.playback_id);
   muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
 
   // Load the player after setting the metadata
