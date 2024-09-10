@@ -177,7 +177,7 @@
 
       const titleDiv = document.createElement('div');
       titleDiv.className = 'story-title';
-      titleDiv.textContent = tilted; // Set the correct title
+      titleDiv.textContent = video.title; // Set the correct title
 
       storyDiv.appendChild(titleDiv);
       container.appendChild(storyDiv);
