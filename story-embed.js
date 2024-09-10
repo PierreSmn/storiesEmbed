@@ -191,7 +191,7 @@
 
 
 
-function createVideoElement(video) {
+function openOverlay(video) {
   const videoElement = document.createElement('mux-player');
   videoElement.className = 'video';
 
@@ -211,7 +211,7 @@ function createVideoElement(video) {
     videoElement.play(); // Start playing the video
   });
 
-  return videoElement;
+  return openOverlay;
 }
 
   function closeOverlay() {
