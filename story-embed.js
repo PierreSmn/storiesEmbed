@@ -106,7 +106,7 @@
     window.MyVideoCarouselConfig.videoData = videoDetails;
 
     // Load Mux Player script FIRST, then render the carousel after it's fully loaded
-    loadScript('https://unpkg.com/@mux/mux-player', function() {
+    loadScript('https://unpkg.com/@mux/mux-player@latest', function() {
       console.log('Mux Player script loaded');
       renderCarousel(); // Only render the carousel after the Mux player script is loaded
     });
