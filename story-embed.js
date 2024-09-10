@@ -191,27 +191,26 @@
 
 
 
-function openOverlay(video) {
-  const videoElement = document.createElement('mux-player');
-  videoElement.className = 'video';
+function openOverlay(index) {
+  const overlay = document.getElementById('fullscreen-overlay');
+  const muxPlayer = overlay.querySelector('mux-player');
+  const video = window.MyVideoCarouselConfig.videoData[index];
 
-  // Set playback ID and metadata BEFORE loading the player
-  videoElement.setAttribute('playback-id', video.playback_id);
-  videoElement.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Ensure title is set correctly
-  videoElement.setAttribute('metadata-viewer-user-id', 'user');
+  console.log('Setting metadata-video-title:', video.title); // Log the title to ensure it's correct
 
-  // Prevent overlay click from interfering with video controls
-  videoElement.addEventListener('click', (event) => {
-    event.stopPropagation();
+  overlay.style.display = 'flex';
+
+  // Set all necessary attributes before loading the player
+  muxPlayer.setAttribute('playback-id', video.playback_id);
+  muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Set the title before loading
+  muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
+
+  // Load the player after setting the metadata
+  muxPlayer.load();
+
+  muxPlayer.addEventListener('loadeddata', function () {
+    muxPlayer.play(); // Play the video when the data is ready
   });
-
-  // Add event listener to handle when the video is fully loaded
-  videoElement.addEventListener('loadeddata', () => {
-    console.log('Video is loaded and ready to play:', videoElement);
-    videoElement.play(); // Start playing the video
-  });
-
-  return openOverlay;
 }
 
   function closeOverlay() {
