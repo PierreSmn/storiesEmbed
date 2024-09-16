@@ -8,7 +8,7 @@
   };
 
   const supabaseUrl = 'https://pifcxlqwffdrqcwggoqb.supabase.co/rest/v1/integrations';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpZmN4bHF3ZmZkcnFjd2dnb3FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyNjY2NTYsImV4cCI6MTk4ODg0MjY1Nn0.lha9G8j7lPLVGv0IU1sAT4SzrJb0I87LfhhvQV8Tc2Q';
+  const supabaseKey = 'YOUR_SUPABASE_KEY'; // Replace with your actual Supabase key
 
   // Function to fetch video data from the integration ID
   async function fetchVideoData(integrationId) {
@@ -96,10 +96,13 @@
 
     // Fetch video details from hostedSubs
     const videoData = await fetchVideoDetails(videoIds);
+
+    // Map videoDetails to include custom titles from integrationData
     const videoDetails = videoIds.map((id, index) => {
       const video = videoData.find(v => v.id === id);
       return {
-        ...video
+        ...video,
+        customTitle: integrationData[`title${index + 1}`] || video.title // Use title from integrationData
       };
     });
 
@@ -158,7 +161,7 @@
     console.log('Video Data:', videoData);
 
     videoData.forEach((video, index) => {
-      console.log(`Creating story for video: ${video.title}`);
+      console.log(`Creating story for video: ${video.customTitle}`);
       const storyDiv = document.createElement('div');
       storyDiv.className = 'story';
       storyDiv.id = `story-${index + 1}`;
@@ -168,7 +171,7 @@
 
       const img = document.createElement('img');
       img.src = video.thumbnail;
-      img.alt = video.title; // Use the title for the alt attribute
+      img.alt = video.customTitle; // Use the custom title for the alt attribute
 
       const playButtonOverlay = document.createElement('div');
       playButtonOverlay.className = 'play-button-overlay';
@@ -184,7 +187,7 @@
 
       const titleDiv = document.createElement('div');
       titleDiv.className = 'story-title';
-      titleDiv.textContent = video.title; // Set the correct title
+      titleDiv.textContent = video.customTitle; // Use custom title from integrationData
 
       storyDiv.appendChild(titleDiv);
       container.appendChild(storyDiv);
@@ -204,14 +207,12 @@
     const video = window.MyVideoCarouselConfig.videoData[index];
 
     // Log title and metadata
-    console.log('Setting metadata-video-title:', video.title);
+    console.log('Setting metadata-video-title:', video.customTitle);
 
     // Set the metadata BEFORE loading the player
     muxPlayer.setAttribute('playback-id', video.playback_id);
-    muxPlayer.setAttribute('metadata-video-title', video.title || 'Untitled Video'); // Ensure title is set correctly
+    muxPlayer.setAttribute('metadata-video-title', video.customTitle || 'Untitled Video'); // Use custom title
     muxPlayer.setAttribute('metadata-viewer-user-id', 'user');
-
-
 
     // Load the player AFTER setting metadata
     muxPlayer.load();
