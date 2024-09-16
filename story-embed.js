@@ -161,7 +161,7 @@
     console.log('Video Data:', videoData);
 
     videoData.forEach((video, index) => {
-      console.log(`Creating story for video: ${video.customTitle}`);
+      console.log(`Creating story for video: ${customTitle}`);
       const storyDiv = document.createElement('div');
       storyDiv.className = 'story';
       storyDiv.id = `story-${index + 1}`;
